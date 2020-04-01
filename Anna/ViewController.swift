@@ -31,25 +31,26 @@ import UIKit
         }
         
         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            
+            //get the index of message to grab by subtracting annas birhtday from current date
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy/MM/dd"
+            let someDateTime = formatter.date(from: "2019/9/8") //anna's birthday
+            
+            let calendar = Calendar.current
+            
+            // Replace the hour (time) of both dates with 00:00
+            let date1 = calendar.startOfDay(for: someDateTime!)
+            let date2 = calendar.startOfDay(for: Date())
+            
+            let components = calendar.dateComponents([.day], from: date1, to: date2)
+            
+            let dayIndex = components.day!
+            
             if segue.identifier == "ShowTodaysMessage"
             {
-                //get the index of message to grab by subtracting annas birhtday from current date
-                
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy/MM/dd"
-                let someDateTime = formatter.date(from: "2019/9/8") //anna's birthday
-                
-                let calendar = Calendar.current
-                
-                // Replace the hour (time) of both dates with 00:00
-                let date1 = calendar.startOfDay(for: someDateTime!)
-                let date2 = calendar.startOfDay(for: Date())
-                
-                let components = calendar.dateComponents([.day], from: date1, to: date2)
-                
-                let dayIndex = components.day!
                 //grab the message using index
-	                let todaysMessage = app.messages[dayIndex]
+                let todaysMessage = app.messages[dayIndex]
                 print(todaysMessage.message)
                 if let nextViewController = segue.destination as? TodaysMessageViewController {
                     nextViewController.messageToShow = todaysMessage.message
@@ -57,6 +58,17 @@ import UIKit
                     print(todaysMessage.message)
                 }
             }
+            if segue.identifier == "ShowPastMessages"
+            {
+                print("okay")
+                if let nextViewController = segue.destination as? PastMessagesCollectionViewController {
+                    print("yayay")
+                    nextViewController.pastMessages = Array(app.messages[0...dayIndex])
+                    print("okay okay")
+                    
+                }
+            }
+            
         }
         
         
@@ -65,7 +77,7 @@ import UIKit
             
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy/MM/dd"
-            let someDateTime = formatter.date(from: "2019/08/28") //anna's birthday
+            let someDateTime = formatter.date(from: "2019/9/08") //anna's birthday
             
             let calendar = Calendar.current
             
